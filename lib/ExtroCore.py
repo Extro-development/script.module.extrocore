@@ -23,6 +23,10 @@ def getProdname():
     f = open('/etc/prodinfo/prodname').read()
     return f.rstrip("\n").rstrip("\r")
 
+def deviceSuspend():
+    log('Suspend device')
+    xbmc.executebuiltin('Suspend')
+
 def rebootAndroid():
     log('Reboot to Android started')
     retvalue = -1
