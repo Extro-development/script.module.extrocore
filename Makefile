@@ -48,7 +48,7 @@ uninstall:
 
 $(BUILDDIR)/$(ADDON_NAME): $(BUILDDIR)/$(ADDON_NAME)/lib
 	mkdir -p $(BUILDDIR)/$(ADDON_NAME)
-	cp -R *.png *.py $(BUILDDIR)/$(ADDON_NAME)
+	cp -R *.py $(BUILDDIR)/$(ADDON_NAME)
 	cp LICENSE.txt $(BUILDDIR)/$(ADDON_NAME)
 	cp addon.xml $(BUILDDIR)/$(ADDON_NAME)
 
