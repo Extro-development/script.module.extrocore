@@ -6,6 +6,7 @@
 ##
 
 import sys
+import subprocess
 import xbmc
 import xbmcaddon
 
@@ -16,8 +17,18 @@ ID    = 'script.module.extrocore'
 ADDON = xbmcaddon.Addon(ID)
 PATH  = ADDON.getAddonInfo("path")
 
+DEBUG_FLAG = False
+
 def log(text):
     xbmc.log("[ExtroCore] : %s" % str(text))
+
+def fw_setenv(key, value):
+    proc = subprocess.Popen(['/usr/bin/fw_setenv', str(key), str(value)], stdout=subprocess.PIPE, shell=True)
+    (out, err) = proc.communicate()
+    if DEBUG_FLAG:
+        log('fw_setenv: Key: %s; Valie: %s' % (str(key), str(value)))
+        log('fw_setenv: output: %s' % str(out))
+        log('fw_setenv: error:  %s' % str(err))
 
 def getProdname():
     f = open('/etc/prodinfo/prodname').read()
@@ -30,14 +41,12 @@ def deviceSuspend():
 def rebootAndroid():
     log('Reboot to Android started')
     retvalue = -1
-    retvalue = os.system('fw_setenv forcedroid 1')
-    log("Setting variable returned: %s" % str(retvalue))
+    fw_setenv('forcedroid', '1')
     xbmc.executebuiltin('XBMC.Reset()')
 
 def rebootLinux():
     log('Reboot to Linux started')
-    retvalue = os.system('fw_setenv forcelinux 1')
-    log("Setting variable returned: %s" % str(retvalue))
+    fw_setenv('forcelinux', '1')
     xbmc.executebuiltin('XBMC.Reset()')
 
 def debianInstalled():
@@ -49,8 +58,7 @@ def debianInstalled():
 def rebootDebian():
     if debianInstalled():
         log('Reboot to Debian started')
-        retvalue = os.system('fw_setenv forcedebian 1')
-        log("Setting variable returned: %s" % str(retvalue))
+        fw_setenv('forcedebian', '1')
         xbmc.executebuiltin('XBMC.Reset()')
     else:
         log("Debian is not installed")
